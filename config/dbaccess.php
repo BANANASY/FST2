@@ -14,8 +14,8 @@ class DB {
     }
 
     function getAddress() {
-        $this->connect2DB();
-        $query = "SELECT * FROM ADDRESS";
+        $db = $this->connect2DB();
+        $query = "SELECT * FROM address";
         $ergebnis = $this->connection->query($query);
         if ($ergebnis) {
             $zeile = $ergebnis->fetch_object();

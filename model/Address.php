@@ -12,10 +12,61 @@
  * @author NexX
  */
 class Address {
-    private $AddressID;
-    private $Address;
-    private $ZIP;
+    private $addressID;
+    private $address;
+    private $zip;
+    private $city;
+    private $country;
     
-            
+    function __construct($addressID, $address, $zip, $city, $country) {
+        $this->addressID = $addressID;
+        $this->address = $address;
+        $this->zip = $zip;
+        $this->city = $city;
+        $this->country = $country;
+    }
+
+    
+    function getAddressID() {
+        return $this->addressID;
+    }
+
+    function getAddress() {
+        return $this->address;
+    }
+
+    function getZip() {
+        return $this->zip;
+    }
+
+    function getCity() {
+        return $this->city;
+    }
+
+    function getCountry() {
+        return $this->country;
+    }
+
+    function setAddressID($addressID) {
+        $this->addressID = $addressID;
+    }
+
+    function setAddress($address) {
+        $this->address = $address;
+    }
+
+    function setZip($zip) {
+        $this->zip = $zip;
+    }
+
+    function setCity($city) {
+        $this->city = $city;
+    }
+
+    function setCountry($country) {
+        $this->country = $country;
+    }
+
+
     
 }
