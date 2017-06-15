@@ -17,7 +17,7 @@ and open the template in the editor.
             </div>
             <div class="container_main">
                 <div class="infoboard">
-                    
+                    <p>Khaled is infinity</p>
                 </div>
                 <div class="databoard">
                     
