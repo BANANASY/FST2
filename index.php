@@ -8,7 +8,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <link href="/res/css/style.css" rel="stylesheet">
+        <link href="./res/css/style.css" type="text/css" rel="stylesheet">
     </head>
     <body>
         <div class="container">
