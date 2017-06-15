@@ -33,3 +33,10 @@ html, body{
     padding:15px;
     text-align:center;
 }
+main{
+    margin-top: 100px;
+    background-color:purple;
+    height: 500px;
+    width: 500px;
+    border: 1px double black;
+}

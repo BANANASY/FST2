@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<navigation>
+    <visitor>
+        <menu>
+            <title>login</title>
+            <link>OpenPurchaseOrder.php</link>
+        </menu>
+    </visitor>
+    <user>
+        <menu>
+            <title>OpenPurchaseOrder</title>
+            <link>OpenPurchaseOrder.php</link>
+        </menu>
+        <menu>
+            <title>ReviewPurchaseOrder</title>
+            <link>ReviewPurchaseOrder.php</link>
+        </menu>
+        <menu>
+            <title>Complete Purchase Order</title>
+            <link>CompletePurchaseOrder.php</link>
+        </menu>
+        <menu>
+            <title>OpenSalesOrder</title>
+            <link>OpenSalesOrder.php</link>
+        </menu>
+        <menu>
+            <title>ReviewSalesOrder</title>
+            <link>ReviewSalesOrder.php</link>
+        </menu>
+        <menu>
+            <title>CompleteSalesOrder</title>
+            <link>CompleteSalesOrder.php</link>
+        </menu>
+    </user>
+</navigation>
+
