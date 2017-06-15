@@ -14,15 +14,38 @@ class DB {
     }
 
     function getAddress() {
-        $db = $this->connect2DB();
+        $address = array();
+
+        $con = $this->connect2DB();
         $query = "SELECT * FROM address";
-        $ergebnis = $this->connection->query($query);
-        if ($ergebnis) {
-            $zeile = $ergebnis->fetch_object();
-            echo '<p>'.$zeile->address.'</p>';
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $address[] = new Address($line->AddressID, $line->Address, $line->ZIP, $line->City, $line->Country);
+            }
+            $con->close();
+            return $address;
+        } else {
+            $con->close();
+            return false;
         }
-        $this->connection->close();
-        return true;
     }
+
+//
+//        $address = array();
+//        $con = $this->connect2DB();
+//        $query = "SELECT * FROM address";
+//        $result = $con->prepare($query);
+//        $result->execute();
+//        $result->bind_result($addressID, $address, $zip, $city, $country);
+//        if ($result) {
+//            while ($result) {
+//                $address[] = new Address($addressID, $address, $zip, $city, $country);
+//            }
+//        }
+//
+//
+//        $con->close();
+//        return $address;
+//    }
 }
-?>
