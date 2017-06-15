@@ -16,8 +16,9 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Storage</title>
-        <link rel="stylesheet"  type="text/css" href="res/css/style.css">
+        <title>DIBWARS</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="./res/css/style.css" type="text/css" rel="stylesheet">
     </head>
     <body>
         <h1>NexX war hier!</h1>
@@ -25,11 +26,16 @@ and open the template in the editor.
             <div class="nav_left">
 
             </div>
-            <div class="container_main">
+            <div class="container_main col-md-8">
                 <div class="infoboard">
-
                 </div>
                 <div class="databoard">
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
                     <?php
                     $address = $db->getAddress();
                     foreach ($address as $result) {
@@ -38,8 +44,3 @@ and open the template in the editor.
                     ?>
 
 
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
