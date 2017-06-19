@@ -3,29 +3,6 @@ html, body{
     padding:0;
     margin:0;
 }
-.nav_left{
-    background-color:lightblue;
-    display:inline-block;
-    height: 100%;
-    width:20%;
-}
-.container_main{
-    background-color:red;
-    display:inline-block;
-    height:100%;
-    width:70%;
-}
-.infoboard{
-    background-color:yellow;
-    height:150px;
-    width:100%;
-}
-.databoard{
-    background-color:purple;
-    height:calc(100% - 150px);
-    width:100%;
-    margin:0;
-}
 /*.container{
     background-color:green;
     height: 100%;
@@ -34,10 +11,54 @@ html, body{
     text-align:center;
 }*/
 main{
-    margin: 100px 10%;
-    
-/*    background-color:purple;*/
+    text-align:center;
+    margin:auto;
     height: calc(100% - 200px);
     width: 80%;
     border: 1px double black;
+}
+
+/* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
+@font-face {
+    font-family:"STARWARS";
+    src:url("../fonts/STARWARS.eot?") format("eot"),
+        url("../fonts/STARWARS.woff") format("woff"),
+        url("../fonts/STARWARS.ttf") format("truetype"),
+        url("../fonts/STARWARS.svg#STARWARS") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+
+p.dibwars{
+    font-family:"STARWARS";
+    font-size:100px;
+    
+}
+.nav_inner{
+    margin:auto;
+}
+.nav_list{
+    font-size:20px;
+}
+header{
+    padding:10px;
+}
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+  .sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+    max-height: none;
+  }
+  .sidebar-nav .navbar ul {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li {
+    float: none;
+    display: block;
+  }
+  .sidebar-nav .navbar li a {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
 }
