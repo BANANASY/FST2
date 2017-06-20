@@ -1,3 +1,30 @@
+<?php
+require_once 'model/Goods.class.php';
+require_once 'model/Address.class.php';
+require_once 'model/PurchaseOrder.class.php';
+require_once 'model/PurchasedGoods.class.php';
+require_once 'config/dbaccess.php';
+
+$db = new DB();
+
+function consolePrint($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(', ', $output); //wenn array dann mach einen string daraus und zwischen jedem wert klebe ("$glue") einen beistrich hinein
+
+    echo "<script>console.log( 'TestData: " . $output . "' );</script>";
+}
+
+function alertPrint($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(', ', $output);
+
+    echo "<script>alert('" . $output . "');</script>";
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -24,9 +51,9 @@
 
 
         <link rel="stylesheet" type="text/css" href="res/css/style.css">
-       
 
-        
+
+
 
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,19 +62,14 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-<?php
-require_once 'model/Address.php';
-require_once 'config/dbaccess.php';
 
-$db = new DB();
-?>
 
 
     <body>
 
         <header>
             <!-- Fixed navbar -->
-            <?php include 'navigation_bar.php'; ?>      
+<?php include 'navigation_bar.php'; ?>      
         </header>
-        
+
         <main>

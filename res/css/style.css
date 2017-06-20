@@ -35,9 +35,20 @@ html, body{
 }*/
 main{
     margin: 100px 10%;
-    
-/*    background-color:purple;*/
+
+    /*    background-color:purple;*/
     height: calc(100% - 200px);
     width: 80%;
     border: 1px double black;
+}
+
+
+span.open{
+    color: red;
+}
+span.reviewed{
+    color: orange;
+}
+span.completed{
+    color: green;
 }
