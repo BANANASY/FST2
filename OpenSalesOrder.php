@@ -1,4 +1,6 @@
-<?php include 'inc/header.php'; ?>
+<?php
+include 'inc/header.php';
+?>
 <!--filter hohlen-->
 <?php
 if (empty($_GET['filter'])) {
@@ -20,7 +22,20 @@ if (empty($_GET['filter'])) {
         </div>
     </div>
 </nav>
-
+<?php
+$db = new DB();
+switch ($load) {
+    case 1:
+        $db->getOpenSC();
+        break;
+    case 2:
+        $db->getProcessedSC();
+        break;
+    case 3:
+        $db->getCompletedSC();
+        break;
+}
+?>
 
 
 <?php include 'inc/footer.php'; ?>
