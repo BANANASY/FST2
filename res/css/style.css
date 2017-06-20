@@ -16,6 +16,7 @@ main{
     height: calc(100% - 200px);
     width: 80%;
     border: 1px double black;
+    padding: 0 20px;
 }
 
 /* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
