@@ -7,8 +7,8 @@ $purchaseOrder = $db->getAllPurchaseOrder();
 
 
 <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
+
+    <div class="col-md-12">
 
         <h1>Open Purchase Order</h1>
 
@@ -23,7 +23,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="heading_<?php echo $cnt; ?>">
                         <h4 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $cnt; ?>" aria-expanded="false" aria-controls="collapse_<?php echo $cnt; ?>">
+                            <a style="text-align:left !important" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $cnt; ?>" aria-expanded="false" aria-controls="collapse_<?php echo $cnt; ?>">
                                 Purchase Order <?php echo $element->getPurchaseOrderID(); ?> from <?php echo $element->getDateTime(); ?> | status: <span class="<?php echo $element->getStatus(); ?>"><?php echo $element->getStatus(); ?></span>
                             </a>
                             <a href="ReviewPurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>"  style="text-align:right; float: right; color:cornflowerblue;"> [open this purchase order]</a>
@@ -69,7 +69,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
 
     </div>
 </div>
-<div class="col-md-2"></div>
+
 </div>
 
 <?php include 'inc/footer.php'; ?>

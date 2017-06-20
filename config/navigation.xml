@@ -9,28 +9,16 @@
     </visitor>
     <user>
         <menu>
-            <title>OpenPurchaseOrder</title>
+            <title>Incoming goods</title>
             <link>OpenPurchaseOrder.php</link>
         </menu>
         <menu>
-            <title>ReviewPurchaseOrder</title>
-            <link>ReviewPurchaseOrder.php</link>
-        </menu>
-        <menu>
-            <title>Complete Purchase Order</title>
-            <link>CompletePurchaseOrder.php</link>
-        </menu>
-        <menu>
-            <title>OpenSalesOrder</title>
+            <title>Outgoing goods</title>
             <link>OpenSalesOrder.php</link>
         </menu>
         <menu>
-            <title>ReviewSalesOrder</title>
-            <link>ReviewSalesOrder.php</link>
-        </menu>
-        <menu>
-            <title>CompleteSalesOrder</title>
-            <link>CompleteSalesOrder.php</link>
+            <title>Stock movement</title>
+            <link>StockMovement.php</link>
         </menu>
     </user>
 </navigation>

@@ -3,52 +3,76 @@ html, body{
     padding:0;
     margin:0;
 }
-.nav_left{
-    background-color:lightblue;
-    display:inline-block;
-    height: 100%;
-    width:20%;
-}
-.container_main{
-    background-color:red;
-    display:inline-block;
-    height:100%;
-    width:70%;
-}
-.infoboard{
-    background-color:yellow;
-    height:150px;
-    width:100%;
-}
-.databoard{
-    background-color:purple;
-    height:calc(100% - 150px);
-    width:100%;
-    margin:0;
-}
-/*.container{
-    background-color:green;
-    height: 100%;
-    height:100%;
-    padding:15px;
-    text-align:center;
-}*/
+
 main{
+    text-align:center;
+    margin:auto;
     margin: 100px 10%;
 
     /*    background-color:purple;*/
     height: calc(100% - 200px);
     width: 80%;
     border: 1px double black;
+    padding: 0 20px;
 }
 
+/* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
+@font-face {
+    font-family:"STARWARS";
+    src:url("../fonts/STARWARS.eot?") format("eot"),
+        url("../fonts/STARWARS.woff") format("woff"),
+        url("../fonts/STARWARS.ttf") format("truetype"),
+        url("../fonts/STARWARS.svg#STARWARS") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
 
-span.open{
-    color: red;
+p.dibwars{
+    font-family:"STARWARS";
+    font-size:100px;
+
 }
-span.reviewed{
-    color: orange;
+.nav_inner{
+    margin:auto;
 }
-span.completed{
-    color: green;
+.nav_list{
+    font-size:20px;
+}
+header{
+    padding:10px;
+}
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    span.open{
+        color: red;
+    }
+    span.reviewed{
+        color: orange;
+    }
+    span.completed{
+        color: green;
+    }
+    th{
+        text-align: center;
+    }
+    h4{
+        text-align:left;
+    }
 }
