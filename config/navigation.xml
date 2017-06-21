@@ -17,7 +17,7 @@
             <link>OpenSalesOrder.php</link>
         </menu>
         <menu>
-            <title>Stock movement</title>
+            <title>Goods overview</title>
             <link>StockMovement.php</link>
         </menu>
     </user>
