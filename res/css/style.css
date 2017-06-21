@@ -41,6 +41,27 @@ p.dibwars{
 header{
     padding:10px;
 }
+span.open{
+    color: red;
+}
+span.reviewed{
+    color: orange;
+}
+span.completed{
+    color: green;
+}
+th{
+    text-align: center;
+}
+h4{
+    text-align:left;
+}
+table{
+    text-align: left;
+}
+
+
+
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
     .sidebar-nav .navbar .navbar-collapse {
@@ -58,21 +79,5 @@ header{
     .sidebar-nav .navbar li a {
         padding-top: 12px;
         padding-bottom: 12px;
-    }
-
-    span.open{
-        color: red;
-    }
-    span.reviewed{
-        color: orange;
-    }
-    span.completed{
-        color: green;
-    }
-    th{
-        text-align: center;
-    }
-    h4{
-        text-align:left;
     }
 }

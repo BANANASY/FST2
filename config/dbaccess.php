@@ -91,7 +91,8 @@ class DB {
                 echo "<td>$cTitle $cFname $cLname</td>";
                 echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
                 echo "<td><a href='tel:$phone'>$phone</a></td>";
-                echo "<td><button class='btn btn-success'><a href='ReviewSalesOrder.php?salesid=$salesId'>process</a></button></td>";
+                echo "<td><input type='button' class='btn btn-info' value='Start processing' onclick='processSC($salesId)'></td>";
+//                echo "<td><button class='btn btn-success'><a href='ReviewSalesOrder.php?salesid=$salesId'>process</a></button></td>";
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -142,7 +143,7 @@ class DB {
                 echo "<td>$cTitle $cFname $cLname</td>";
                 echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
                 echo "<td><a href='tel:$phone'>$phone</a></td>";
-                echo "<td><a href='CompleteSalesOrder.php?salesid=$salesId'>complete</td>";
+                echo "<td><input type='button' class='btn btn-info' value='Continue processing' onclick='processSC($salesId)'></td>";
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -162,7 +163,8 @@ class DB {
                         Unit
                   from salesorder_has_goods join goods using(goodsid)
 		  join goodscategory using (categoryid)
-                  where salesorderid = ?;";
+                  where salesorderid = ?
+                  order by StorageLocation;";
         $ergebnis = $db->prepare($query);
         $ergebnis->bind_param("i", $salesorderid);
         $ergebnis->execute();
@@ -206,21 +208,23 @@ class DB {
                         emp.FirstName,
                         emp.LastName,
                         emp.PhoneNumber,
-                        emp.Email
+                        emp.Email,
+                        outgoingdatetime
                     from salesorder join customer c using (CustomerID)
                                     join Person cust on c.PersonID = cust.PersonID
                                     join employee e using (EmployeeID)
                                     join Person emp on e.PersonID = emp.Personid
                     where status = 'completed'
-                    order by DateTime desc";
+                    order by outgoingdatetime desc";
         $ergebnis = $db->prepare($query);
         $ergebnis->execute();
-        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail);
+        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail, $outgoingdatetime);
         if ($ergebnis) {
             echo "<table class='table table-hover'>";
             echo "<thead><tr>";
             echo "<th>SalesId</th>";
-            echo "<th>Date/Time</th>";
+            echo "<th>Ordered</th>";
+            echo "<th>Completed</th>";
             echo "<th>Customer</th>";
             echo "<th>Sales Employee</th>";
             echo "<th>Call</th>";
@@ -231,6 +235,7 @@ class DB {
                 echo "<tr>";
                 echo "<td>$salesId</td>";
                 echo "<td>$datetime</td>";
+                echo "<td>$outgoingdatetime</td>";
                 echo "<td>$cTitle $cFname $cLname</td>";
                 echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
                 echo "<td><a href='tel:$phone'>$phone</a></td>";
@@ -241,6 +246,90 @@ class DB {
         }
         $ergebnis->close();
         $db->close();
+    }
+
+    public function getFinalRemarks($completeThis) {
+        $db = $this->connect2DB();
+        $query = "select 
+                        DateTime,
+                        cust.title,
+                        cust.FirstName,
+                        cust.LastName,
+                        emp.title,
+                        emp.FirstName,
+                        emp.LastName,
+                        emp.PhoneNumber,
+                        emp.Email,
+                        packagingwishes
+                    from salesorder join customer c using (CustomerID)
+                                    join Person cust on c.PersonID = cust.PersonID
+                                    join employee e using (EmployeeID)
+                                    join Person emp on e.PersonID = emp.Personid
+                    where salesorderid = ?
+                    ";
+        $ergebnis = $db->prepare($query);
+        $ergebnis->bind_param("i", $completeThis);
+        $ergebnis->execute();
+        $ergebnis->bind_result($datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail, $wishes);
+        if ($ergebnis) {
+            echo "<div class='jumbotron'";
+            while ($ergebnis->fetch()) {
+                echo "<p><b>Salesman: </b>";
+                echo "<a href='mailto:$mail'>$eTitle $eFname $eLname</a><br>";
+                echo "<b>Phone:</b> <a href='tel:$phone'>$phone</a></p>";
+                echo "<p><b>Customer: </b>";
+                echo "$cTitle $cFname $cLname</p>";
+                echo "<p><b>Packaging wishes:</b><br>$wishes</p>";
+            }
+            echo "</div>";
+        }
+        $ergebnis->close();
+        $db->close();
+    }
+
+    public function markReviewed($completeThis) {
+        $db = $this->connect2DB();
+        $query = "UPDATE salesorder SET Status='reviewed' WHERE SalesOrderID=?;";
+        $ergebnis = $db->prepare($query);
+        $ergebnis->bind_param("i", $completeThis);
+        $ergebnis->execute();
+        if ($ergebnis) {
+            $success = true;
+        } else {
+            $success = false;
+        }
+        $ergebnis->close();
+        $db->close();
+        return $success;
+    }
+
+    public function completeSalesOrder($salesId) {
+        $db = $this->connect2DB();
+        
+//        $query = "UPDATE `s17-bvz2-fst-20`.`goods` SET `StockAmount`='150' WHERE `GoodsID`='2';";
+//        echo $query;
+//        $ergebnis = $db->prepare($query);
+//        $ergebnis->bind_param("i", $salesId);
+//        $ergebnis->execute();
+//        if ($ergebnis) {
+//            $success = true;
+//        } else {
+//            $success = false;
+//        }
+        
+        $query = "UPDATE salesorder SET OutgoingDateTime='".date("Y-m-d H:m:s")."', Status='completed' WHERE SalesOrderID=?;";
+        echo $query;
+        $ergebnis = $db->prepare($query);
+        $ergebnis->bind_param("i", $salesId);
+        $ergebnis->execute();
+        if ($ergebnis) {
+            $success = true;
+        } else {
+            $success = false;
+        }
+        $ergebnis->close();
+        $db->close();
+        return $success;
     }
 
 //
