@@ -16,8 +16,8 @@ if (empty($_GET['filter'])) {
         <div id="navbar" class="navbar-collapse collapse">
             <ul id="menu" class="nav navbar-nav">
                 <li><a href = "OpenSalesOrder.php?filter=1">Open</a></li>
-                <li><a href = "OpenSalesOrder.php?filter=2">In process</a></li>
-                <li><a href = "OpenSalesOrder.php?filter=3">Closed</a></li>
+                <li><a href = "OpenSalesOrder.php?filter=2">Reviewed</a></li>
+                <li><a href = "OpenSalesOrder.php?filter=3">Completed</a></li>
             </ul>
         </div>
     </div>
@@ -39,3 +39,10 @@ switch ($load) {
 
 
 <?php include 'inc/footer.php'; ?>
+
+<script>
+    function processSC($salesId)
+    {
+        location.href = "ReviewSalesOrder.php?salesid=" + $salesId;
+    }
+</script>

@@ -63,3 +63,7 @@ header{
     padding-bottom: 12px;
   }
 }
+
+table {
+    text-align: left;
+}
