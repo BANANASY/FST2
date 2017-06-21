@@ -8,12 +8,6 @@ $(document).ready(function () {
         window.location.href = '../FST2/ArticleMovement.php?product=' + id;
     });
 
-    $(".goodCage").click(function () {
-        var id = $(this).find(".good_id").val();
-        $(this).attr('name');
-        window.location.href = '../FST2/ArticleMovement.php?product=' + id + "&";
-    });
-
     $(".goods-incdate").click(function () {
         var elems = $.makeArray($(this).parent().parent().parent().parent().find(".goods-entries"));
         
