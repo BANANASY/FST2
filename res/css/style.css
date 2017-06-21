@@ -3,18 +3,38 @@ html, body{
     padding:0;
     margin:0;
 }
-
 main{
     text-align:center;
     margin:auto;
-    margin: 100px 10%;
-
-    /*    background-color:purple;*/
-    height: calc(100% - 200px);
     width: 80%;
     border: 1px double black;
+    margin-bottom:200px;
+    display:block;
+    overflow:auto;
     padding: 0 20px;
 }
+
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+
 
 /* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
 @font-face {
@@ -61,23 +81,68 @@ table{
 }
 
 
+.goods_table td{
+    text-align:left;
+}
 
-/* make sidebar nav vertical */ 
-@media (min-width: 768px) {
-    .sidebar-nav .navbar .navbar-collapse {
-        padding: 0;
-        max-height: none;
-    }
-    .sidebar-nav .navbar ul {
-        float: none;
-        display: block;
-    }
-    .sidebar-nav .navbar li {
-        float: none;
-        display: block;
-    }
-    .sidebar-nav .navbar li a {
-        padding-top: 12px;
-        padding-bottom: 12px;
-    }
+.goodCage{
+    cursor:pointer;
+}
+
+.goodstable-container{
+    background-color:#f4fff4;
+    height:210px;
+    border-bottom:5px ridge green;
+}
+.goodstable{
+    font-size:18px;
+    margin:20px;
+    border:2px solid #005502;
+}
+
+.goodstable-left{
+    float:left;
+    width:45%
+}
+.goodstable-right{
+    float:right;
+    width:45%;
+
+}
+.goodstable-left-td-title, .goodstable-right-td-title{
+    padding-left:10px;
+    width:50%;
+    background-color:#CCFFBB;
+    border-top:1px solid #f4fff4
+}
+.goodstable-right-td, .goodstable-left-td{
+    padding-right:10px;
+    width:50%;
+    background-color:#CCFFBB;
+    border-top:1px solid #f4fff4; 
+}
+.movement-container{
+    background-color:#f4fff4;
+    display:block;
+    overflow:auto;
+}
+.movement-headline{
+
+}
+.mh-title{
+
+}
+.movement-outgoing-container, .movement-incoming-container{
+    display:inline-block;
+    width:49%;
+    padding:20px;
+}
+.movement-incoming-container{
+    border-right:5px ridge green;
+}
+.movement-outgoing-table{
+
+}
+.goods-deliverydate{
+    cursor:pointer;
 }
