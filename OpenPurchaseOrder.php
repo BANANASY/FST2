@@ -29,7 +29,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
                             <a href="ReviewPurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>"  style="text-align:right; float: right; color:cornflowerblue;"> [open this purchase order]</a>
                         </h4>
                     </div>
-                    <div id="collapse_<?php echo $cnt; ?>" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_<?php echo $cnt; ?>">
+                    <div id="collapse_<?php echo $cnt; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_<?php echo $cnt; ?>">
                         <div class="panel-body">
                             <table class="table table-hover">
                                 <tr>
