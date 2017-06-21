@@ -31,7 +31,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
                     </div>
                     <div id="collapse_<?php echo $cnt; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_<?php echo $cnt; ?>">
                         <div class="panel-body">
-                            <table class="table table-hover">
+                            <table class="table table-hover nexx">
                                 <tr>
                                     <th>PurchaseOrderID</th>
                                     <th>GoodsID</th>                  

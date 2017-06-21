@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $(".goodCage").click(function () {
         var id = $(this).find(".good_id").html();
-        window.location.href = '../FST2/ArticleMovement.php?product=' + id;
+        window.location.href = 'ArticleMovement.php?product=' + id;
     });
 
     $(".goods-incdate").click(function () {
