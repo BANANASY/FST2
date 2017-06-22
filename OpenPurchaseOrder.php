@@ -6,7 +6,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
 ?>
 
 
-<div class="row">
+<div class="row nexx-container">
 
     <div class="col-md-12">
 
