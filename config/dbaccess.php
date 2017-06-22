@@ -13,7 +13,7 @@ class DB {
         return $this->connection;
     }
 
-    function getAddress() {
+    function getAllAddress() {
         $address = array();
 
         $con = $this->connect2DB();
@@ -25,6 +25,25 @@ class DB {
             }
             $con->close();
             return $address;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function getAllPurchasedGoods($purchaseOrderID) {
+        $purchasedGoods = array();
+
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM PurchaseOrder_Has_Goods WHERE PurchaseOrderID = " . $purchaseOrderID;
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $purchasedGoods[] = new PurchasedGoods($line->PurchaseOrderID, $line->GoodsID, $line->Amount, $line->PurchasePrice);
+            }
+            $con->close();
+
+            return $purchasedGoods;
         } else {
             $con->close();
             return false;
@@ -330,6 +349,24 @@ class DB {
 //        $con->close();
 //        return $address;
 //    }
+    function getAllPurchaseOrder() {
+        $purchaseOrder = array();
+
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM PurchaseOrder";
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $purchaseOrder[] = new PurchaseOrder($line->PurchaseOrderID, $line->SupplierID, $line->EmployeeID, $line->DateTime, $line->Status);
+            }
+            $con->close();
+            return $purchaseOrder;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
     
     function printGoodsList(){
         $conn = $this->connect2DB();

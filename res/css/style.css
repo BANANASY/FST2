@@ -123,3 +123,151 @@ header{
 .goods-deliverydate{
     cursor:pointer;
 }
+html, body{
+    height:100%;
+    padding:0;
+    margin:0;
+}
+main{
+    text-align:center;
+    margin:auto;
+    width: 80%;
+    border: 1px double black;
+    margin-bottom:200px;
+    display:block;
+    overflow:auto;
+    padding: 0 20px;
+}
+
+/* make sidebar nav vertical */ 
+@media (min-width: 768px) {
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+
+
+/* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
+@font-face {
+    font-family:"STARWARS";
+    src:url("../fonts/STARWARS.eot?") format("eot"),
+        url("../fonts/STARWARS.woff") format("woff"),
+        url("../fonts/STARWARS.ttf") format("truetype"),
+        url("../fonts/STARWARS.svg#STARWARS") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+
+p.dibwars{
+    font-family:"STARWARS";
+    font-size:100px;
+
+}
+.nav_inner{
+    margin:auto;
+}
+.nav_list{
+    font-size:20px;
+}
+header{
+    padding:10px;
+}
+span.open{
+    color: red;
+}
+span.reviewed{
+    color: orange;
+}
+span.completed{
+    color: green;
+}
+th{
+    text-align: center;
+}
+h4{
+    text-align:left;
+}
+table.nexx{
+    text-align: left;
+}
+
+
+.goods_table td{
+    text-align:left;
+}
+
+.goodCage{
+    cursor:pointer;
+}
+
+.goodstable-container{
+    background-color:#f4fff4;
+    height:210px;
+    border-bottom:5px ridge green;
+}
+.goodstable{
+    font-size:18px;
+    margin:20px;
+    border:2px solid #005502;
+}
+
+.goodstable-left{
+    float:left;
+    width:45%
+}
+.goodstable-right{
+    float:right;
+    width:45%;
+
+}
+.goodstable-left-td-title, .goodstable-right-td-title{
+    padding-left:10px;
+    width:50%;
+    background-color:#CCFFBB;
+    border-top:1px solid #f4fff4
+}
+.goodstable-right-td, .goodstable-left-td{
+    padding-right:10px;
+    width:50%;
+    background-color:#CCFFBB;
+    border-top:1px solid #f4fff4; 
+}
+.movement-container{
+    background-color:#f4fff4;
+    display:block;
+    overflow:auto;
+}
+.movement-headline{
+
+}
+.mh-title{
+
+}
+.movement-outgoing-container, .movement-incoming-container{
+    display:inline-block;
+    width:49%;
+    padding:20px;
+}
+.movement-incoming-container{
+    border-right:5px ridge green;
+}
+.movement-outgoing-table{
+
+}
+.goods-deliverydate{
+    cursor:pointer;
+}
