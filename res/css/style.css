@@ -18,7 +18,6 @@ main{
     margin-bottom:200px;
     display:block;
     overflow:auto;
-    padding: 0 20px;
 }
 
 /* @font-face kit by Fonts2u (http://www.fonts2u.com) */ 
@@ -76,7 +75,9 @@ header{
 
 .goodstable-container{
     background-color:#f4fff4;
-    height:210px;
+    display:block;
+    overflow:auto;
+    width:100%;
     border-bottom:5px ridge green;
 }
 .goodstable{
@@ -111,12 +112,6 @@ header{
     display:block;
     overflow:auto;
 }
-.movement-headline{
-    
-}
-.mh-title{
-    
-}
 .movement-outgoing-container, .movement-incoming-container{
     display:inline-block;
     width:49%;
@@ -124,9 +119,6 @@ header{
 }
 .movement-incoming-container{
     border-right:5px ridge green;
-}
-.movement-outgoing-table{
-
 }
 .goods-deliverydate{
     cursor:pointer;
