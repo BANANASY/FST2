@@ -66,16 +66,17 @@ switch ($load) {
                 ?>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="heading_<?php echo $cnt; ?>">
+                    <div class="panel-heading nexx" role="tab" id="heading_<?php echo $cnt; ?>">
                         <h4 class="panel-title">
                             <a style="text-align:left !important" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $cnt; ?>" aria-expanded="false" aria-controls="collapse_<?php echo $cnt; ?>">
                                 Purchase Order <?php echo $element->getPurchaseOrderID(); ?> from <?php echo $element->getDateTime(); ?> | status: <span class="<?php echo $element->getStatus(); ?>"><?php echo $element->getStatus(); ?></span>
                             </a>
+
                             <?php
                             switch ($load) {
                                 case 1:
                                     ?>
-                                    <a href="ReviewPurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>"  style="text-align:right; float: right; color:cornflowerblue;"> [review this purchase order]</a>
+                                    <button onclick="location.href = 'ReviewPurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>'"  class="btn btn-info nexx2"> [review this purchase order]</button>
                                     <?php
                                     break;
                                 case 2:
@@ -88,9 +89,10 @@ switch ($load) {
                                     break;
                             }
                             ?>
-                            
                         </h4>
+
                     </div>
+
                     <div id="collapse_<?php echo $cnt; ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_<?php echo $cnt; ?>">
                         <div class="panel-body">
                             <table class="table table-hover nexx">
