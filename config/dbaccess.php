@@ -50,6 +50,119 @@ class DB {
         }
     }
 
+    function getAllPurchaseOrder() {
+        $purchaseOrder = array();
+
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM PurchaseOrder";
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $purchaseOrder[] = new PurchaseOrder($line->PurchaseOrderID, $line->SupplierID, $line->EmployeeID, $line->DateTime, $line->Status);
+            }
+            $con->close();
+            return $purchaseOrder;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function getOnePurchaseOrder($purchaseOrderID) {
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM PurchaseOrder WHERE PurchaseOrderID = " . $purchaseOrderID;
+        $result = $con->query($query);
+        if ($result) {
+            $line = $result->fetch_object();
+            $purchaseOrder = new PurchaseOrder($line->PurchaseOrderID, $line->SupplierID, $line->EmployeeID, $line->DateTime, $line->Status);
+            $con->close();
+            return $purchaseOrder;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function getAllEmployees() {
+        $employee = array();
+
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM Employee JOIN Person using(PersonID)";
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $employee[] = new Employee($line->EmployeeID, $line->PersonID, $line->DepartmentID, $line->EntryDate, $line->TerminationDate, $line->SocialSecurityNumber, $line->FirstName, $line->LastName);
+            }
+            $con->close();
+            return $employee;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function insertDeliveryInfo($deliveryInfo) {
+        $con = $this->connect2DB();
+        $statement = $con->prepare("INSERT INTO `deliveryinfo` (`DeliveryInfoID`, `EmployeeID`, `SupplierID`, `PurchaseOrderID`, `DeliverySlipScanID`, `IncomeDateTime`, `DeliveryInformation`) VALUES (null, ?, ?, ?, ?, ?, ?);");
+
+        $EmployeeID = $deliveryInfo->getEmployeeID();
+        $SupplierID = $deliveryInfo->getSupplierID();
+        $PurchaseOrderID = $deliveryInfo->getPurchaseOrderID();
+        $DeliverySlipScanID = $deliveryInfo->getDeliverySlipScanID();
+        $IncomeDateTime = $deliveryInfo->getIncomeDateTime();
+        $DeliveryInformation = $deliveryInfo->getDeliveryInformation();
+
+        $statement->bind_param("iiisss", $EmployeeID, $SupplierID, $PurchaseOrderID, $DeliverySlipScanID, $IncomeDateTime, $DeliveryInformation);
+        $result = $statement->execute();
+        if ($result) {
+            $last_id = $statement->insert_id;
+            $con->close();
+            return $last_id; //wenn das inserten geklappt hat dann gib die ID des neuen Eintrages zurück
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function insertOneDeliveredGood($deliveredGood) {
+        $con = $this->connect2DB();
+        $statement = $con->prepare("INSERT INTO `delivery_has_goods` (`DeliveryInfoID`, `GoodsID`, `Amount`, `QualityIsOK`) VALUES (?, ?, ?, ?);");
+
+        $DeliveryInfoID = $deliveredGood->getDeliveryInfoID();
+        $GoodsID = $deliveredGood->getGoodsID();
+        $Amount = $deliveredGood->getAmount();
+        $QualityIsOK = $deliveredGood->getQualityIsOK();
+
+        $statement->bind_param("iiii", $DeliveryInfoID, $GoodsID, $Amount, $QualityIsOK);
+        $result = $statement->execute();
+        if ($result) {
+            $con->close();
+            return true;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function updatePurchaseOrderStatus($PurchaseOrderID, $Status) {
+        $con = $this->connect2DB();
+        $statement = $con->prepare("UPDATE PurchaseOrder SET Status = ? WHERE PurchaseOrderID = ?");
+        $statement->bind_param("si", $Status, $PurchaseOrderID);
+        $result = $statement->execute();
+
+        if ($result) {
+            $this->connection->close();
+            return true;
+        } else {
+            $this->connection->close();
+            return false;
+        }
+    }
+
+//-------------------------------------Beautiful Short 'n Awesome ObjectOriented Database Function Stop Here Line-------------------------------------------
+
+
+
     public function getOpenSC() {
         $db = $this->connect2DB();
         $query = "select 
@@ -305,7 +418,7 @@ class DB {
 
     public function completeSalesOrder($salesId) {
         $db = $this->connect2DB();
-        
+
 //        $query = "UPDATE `s17-bvz2-fst-20`.`goods` SET `StockAmount`='150' WHERE `GoodsID`='2';";
 //        echo $query;
 //        $ergebnis = $db->prepare($query);
@@ -316,8 +429,8 @@ class DB {
 //        } else {
 //            $success = false;
 //        }
-        
-        $query = "UPDATE salesorder SET OutgoingDateTime='".date("Y-m-d H:m:s")."', Status='completed' WHERE SalesOrderID=?;";
+
+        $query = "UPDATE salesorder SET OutgoingDateTime='" . date("Y-m-d H:m:s") . "', Status='completed' WHERE SalesOrderID=?;";
         echo $query;
         $ergebnis = $db->prepare($query);
         $ergebnis->bind_param("i", $salesId);
@@ -332,65 +445,29 @@ class DB {
         return $success;
     }
 
-//
-//        $address = array();
-//        $con = $this->connect2DB();
-//        $query = "SELECT * FROM address";
-//        $result = $con->prepare($query);
-//        $result->execute();
-//        $result->bind_result($addressID, $address, $zip, $city, $country);
-//        if ($result) {
-//            while ($result) {
-//                $address[] = new Address($addressID, $address, $zip, $city, $country);
-//            }
-//        }
-//
-//
-//        $con->close();
-//        return $address;
-//    }
-    function getAllPurchaseOrder() {
-        $purchaseOrder = array();
-
-        $con = $this->connect2DB();
-        $query = "SELECT * FROM PurchaseOrder";
-        $result = $con->query($query);
-        if ($result) {
-            while ($line = $result->fetch_object()) {
-                $purchaseOrder[] = new PurchaseOrder($line->PurchaseOrderID, $line->SupplierID, $line->EmployeeID, $line->DateTime, $line->Status);
-            }
-            $con->close();
-            return $purchaseOrder;
-        } else {
-            $con->close();
-            return false;
-        }
-    }
-
-    
-    function printGoodsList(){
+    function printGoodsList() {
         $conn = $this->connect2DB();
-        
+
         $stmt = "SELECT GoodsID, Name, StockAmount, CurrentNetSalesPrice FROM goods WHERE active = 1 ORDER BY GoodsID;";
-        
-        if($ergebnis = $conn->prepare($stmt)){
-            if($ergebnis->execute()){
+
+        if ($ergebnis = $conn->prepare($stmt)) {
+            if ($ergebnis->execute()) {
                 $ergebnis->bind_result($id, $name, $stockAmount, $saleprice);
-                if($ergebnis){
-                    while($ergebnis->fetch()){
+                if ($ergebnis) {
+                    while ($ergebnis->fetch()) {
                         echo "<tr class='goodCage'>";
-                        echo "<td class='good_id'>".$id."</td>";
-                        echo "<td>".$name."</td>";
-                        echo "<td>".$stockAmount."</td>";
-                        echo "<td>".$saleprice."</td>";
+                        echo "<td class='good_id'>" . $id . "</td>";
+                        echo "<td>" . $name . "</td>";
+                        echo "<td>" . $stockAmount . "</td>";
+                        echo "<td>" . $saleprice . "</td>";
                         echo "</tr>";
                     }
                 }
             }
         }
     }
-    
-    function getGoodById ($id) {       
+
+    function getGoodById($id) {
         $id = $id + 0;
         $conn = $this->connect2DB();
         $stmt = "SELECT g.GoodsID, 
@@ -414,19 +491,8 @@ class DB {
         if ($ergebnis = $conn->prepare($stmt)) {
             $ergebnis->bind_param("i", $id);
             if ($ergebnis->execute()) {
-                $ergebnis->bind_result( $goodsid, 
-                                        $category,
-                                        $name,
-                                        $manufacturer, 
-                                        $price, 
-                                        $storagelocation,
-                                        $unit,
-                                        $minamount,
-                                        $stockamount,
-                                        $supplier,
-                                        $taxname,
-                                        $taxpercent);
-                if ($ergebnis) {                   
+                $ergebnis->bind_result($goodsid, $category, $name, $manufacturer, $price, $storagelocation, $unit, $minamount, $stockamount, $supplier, $taxname, $taxpercent);
+                if ($ergebnis) {
                     while ($ergebnis->fetch()) {
                         $goodsarr = [];
                         $goodsarr[0] = $goodsid;
@@ -441,20 +507,20 @@ class DB {
                         $goodsarr[9] = $taxname;
                         $goodsarr[10] = $taxpercent;
                         $goodsarr[11] = $name;
-                        
+
                         return $goodsarr;
-                    }         
-                }  
+                    }
+                }
             }
-        }     
+        }
     }
-    
-    //IS ACTUALLY INCOMING BUT TOO LAZY TO CORRECT
-    function printOutgoingMovementById($id, $asc){
+
+//IS ACTUALLY INCOMING BUT TOO LAZY TO CORRECT
+    function printOutgoingMovementById($id, $asc) {
         $conn = $this->connection;
         $stmt;
-        
-        if($asc){
+
+        if ($asc) {
             $stmt = "SELECT 
                         di.purchaseorderid, 
                         phg.Amount AS OrderAmount, 
@@ -468,7 +534,7 @@ class DB {
                     WHERE dhg.goodsid = ? AND po.status = 'completed'
                     GROUP BY dhg.DeliveryInfoID, dhg.GoodsID
                     ORDER BY deliverydate asc;";
-        }else{
+        } else {
             $stmt = "SELECT 
                         di.purchaseorderid, 
                         phg.Amount AS OrderAmount, 
@@ -483,36 +549,32 @@ class DB {
                     GROUP BY dhg.DeliveryInfoID, dhg.GoodsID
                     ORDER BY deliverydate desc;";
         }
-        
+
         if ($ergebnis = $conn->prepare($stmt)) {
             $ergebnis->bind_param("i", $id);
             if ($ergebnis->execute()) {
-                $ergebnis->bind_result( $purchaseorderid, 
-                                        $orderamount,
-                                        $deliveryamount,
-                                        $orderdate,
-                                        $deliverydate);
-                if ($ergebnis) {                   
+                $ergebnis->bind_result($purchaseorderid, $orderamount, $deliveryamount, $orderdate, $deliverydate);
+                if ($ergebnis) {
                     while ($ergebnis->fetch()) {
                         echo "<tr class='goods-entries'>";
-                        echo "<td data-field-type='number'>".$purchaseorderid."</td>";
-                        echo "<td data-field-type='number'>".$orderamount."</td>";
-                        echo "<td data-field-type='number'>".$deliveryamount."</td>";
-                        echo "<td data-field-type='date'>".$orderdate."</td>";
-                        echo "<td data-field-type='date' class='goods-inc-deliverydate'>".$deliverydate."</td>";
+                        echo "<td data-field-type='number'>" . $purchaseorderid . "</td>";
+                        echo "<td data-field-type='number'>" . $orderamount . "</td>";
+                        echo "<td data-field-type='number'>" . $deliveryamount . "</td>";
+                        echo "<td data-field-type='date'>" . $orderdate . "</td>";
+                        echo "<td data-field-type='date' class='goods-inc-deliverydate'>" . $deliverydate . "</td>";
                         echo "<tr>";
                     }
                 }
             }
         }
-    }  
-    
-    //IS ACTUALLY OUTGOING, BUT TOO LAZY TO CORRECT
-    function printIncomingMovementById($id,$asc){
+    }
+
+//IS ACTUALLY OUTGOING, BUT TOO LAZY TO CORRECT
+    function printIncomingMovementById($id, $asc) {
         $conn = $this->connection;
         $stmt;
-        
-        if($asc){
+
+        if ($asc) {
             $stmt = "SELECT 
                         so.salesorderid,
                         shg.amount AS DeliveryAmount,
@@ -523,7 +585,7 @@ class DB {
                     WHERE shg.goodsid = ? AND so.status = 'completed'
                     GROUP BY shg.goodsid, shg.salesorderid
                     ORDER BY deliverydate asc;";
-        }else{
+        } else {
             $stmt = "SELECT 
                         so.salesorderid,
                         shg.amount AS DeliveryAmount,
@@ -535,25 +597,23 @@ class DB {
                     GROUP BY shg.goodsid, shg.salesorderid
                     ORDER BY deliverydate desc;";
         }
-        
+
         if ($ergebnis = $conn->prepare($stmt)) {
             $ergebnis->bind_param("i", $id);
             if ($ergebnis->execute()) {
-                $ergebnis->bind_result( $salesorderid, 
-                                        $deliveryamount,
-                                        $orderdate,
-                                        $deliverydate);
-                if ($ergebnis) {                   
+                $ergebnis->bind_result($salesorderid, $deliveryamount, $orderdate, $deliverydate);
+                if ($ergebnis) {
                     while ($ergebnis->fetch()) {
                         echo "<tr class='goods-entries'>";
-                        echo "<td data-field-type='number'>".$salesorderid."</td>";
-                        echo "<td data-field-type='number'>".$deliveryamount."</td>";
-                        echo "<td data-field-type='date'>".$orderdate."</td>";
-                        echo "<td data-field-type='date' class='goods-out-deliverydate'>".$deliverydate."</td>";
+                        echo "<td data-field-type='number'>" . $salesorderid . "</td>";
+                        echo "<td data-field-type='number'>" . $deliveryamount . "</td>";
+                        echo "<td data-field-type='date'>" . $orderdate . "</td>";
+                        echo "<td data-field-type='date' class='goods-out-deliverydate'>" . $deliverydate . "</td>";
                         echo "<tr>";
                     }
                 }
             }
         }
     }
+
 }
