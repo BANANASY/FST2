@@ -8,7 +8,7 @@ $purchaseOrder = $db->getAllPurchaseOrder();
 
 <div class="row nexx-container">
 
-    <div class="col-md-12"><br>
+    <div class="col-md-12">
 
         <h1>Open Purchase Order</h1>
 
