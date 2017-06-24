@@ -52,6 +52,11 @@ th{
 }
 h4{
     text-align:left;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
 }
 table.nexx{
     text-align: left;
@@ -68,13 +73,13 @@ button.nexx{
 }
 div.nexx{
     /*position: relative;*/
-    height: 45px;
+    height: 49px;
 }
 button.nexx2{
     /*position: absolute;*/
     float:right;
     right: 10px;
-    margin-top: -4px;
+    margin-top: -8px;
 }
 input.nexx{
     width: 10ch;
