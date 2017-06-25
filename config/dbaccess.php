@@ -547,10 +547,10 @@ class DB {
                         t.Name AS tax,
                         t.Percent 
                     FROM goods g
-                    JOIN goodscategory gc USING (categoryid)
-                    JOIN supplier_has_goods USING (goodsid)
-                    JOIN taxes t USING (taxid)
-                    JOIN supplier s USING (supplierid)
+                    LEFT JOIN goodscategory gc USING (categoryid)
+                    LEFT JOIN supplier_has_goods USING (goodsid)
+                    LEFT JOIN taxes t USING (taxid)
+                    LEFT JOIN supplier s USING (supplierid)
                     WHERE goodsid = ?";
         if ($ergebnis = $conn->prepare($stmt)) {
             $ergebnis->bind_param("i", $id);
