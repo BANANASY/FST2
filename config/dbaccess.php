@@ -234,42 +234,37 @@ class DB {
                         DateTime,
                         cust.title,
                         cust.FirstName,
-                        cust.LastName,
-                        emp.title,
-                        emp.FirstName,
-                        emp.LastName,
-                        emp.PhoneNumber,
-                        emp.Email
+                        cust.LastName
                     from salesorder join customer c using (CustomerID)
                                     join Person cust on c.PersonID = cust.PersonID
-                                    join employee e using (EmployeeID)
-                                    join Person emp on e.PersonID = emp.Personid
                     where status = 'open'
                     order by DateTime";
         $ergebnis = $db->prepare($query);
         $ergebnis->execute();
-        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail);
+        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname);
         if ($ergebnis) {
             echo "<table class='table table-hover'>";
             echo "<thead><tr>";
-            echo "<th>SalesId</th>";
-            echo "<th>Date/Time</th>";
-            echo "<th>Customer</th>";
-            echo "<th>Sales Employee</th>";
-            echo "<th>Call</th>";
+            echo "<th>salesId</th>";
+            echo "<th>date/time</th>";
+            echo "<th>customer</th>";
+            echo "<th>goods</th>";
             echo "<th>process</th>";
             echo "</tr>";
             echo "</thead>";
             echo "<tbody>";
             while ($ergebnis->fetch()) {
+                $so = new salesOrder($salesId);
                 echo "<tr>";
                 echo "<td>$salesId</td>";
                 echo "<td>$datetime</td>";
                 echo "<td>$cTitle $cFname $cLname</td>";
-                echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
-                echo "<td><a href='tel:$phone'>$phone</a></td>";
-                echo "<td><input type='button' class='btn btn-info' value='Start processing' onclick='processSC($salesId)'></td>";
-//                echo "<td><button class='btn btn-success'><a href='ReviewSalesOrder.php?salesid=$salesId'>process</a></button></td>";
+                echo "<td>" . $so->getGoodsCount() . "</td>";
+                if ($so->isReadyForShipping()) {
+                    echo "<td><input type='button' class='btn btn-success' value='Start processing' onclick='processSC($salesId)'></td>";
+                } else {
+                    echo "<td><input type='button' class='btn btn-danger' value='Not enough stock' onclick='processSC($salesId)'></td>";
+                }
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -286,41 +281,38 @@ class DB {
                         DateTime,
                         cust.title,
                         cust.FirstName,
-                        cust.LastName,
-                        emp.title,
-                        emp.FirstName,
-                        emp.LastName,
-                        emp.PhoneNumber,
-                        emp.Email
+                        cust.LastName
                     from salesorder join customer c using (CustomerID)
                                     join Person cust on c.PersonID = cust.PersonID
-                                    join employee e using (EmployeeID)
-                                    join Person emp on e.PersonID = emp.Personid
                     where status = 'reviewed'
                     order by DateTime desc";
         $ergebnis = $db->prepare($query);
         $ergebnis->execute();
-        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail);
+        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname);
         if ($ergebnis) {
             echo "<table class='table table-hover'>";
             echo "<thead><tr>";
-            echo "<th>SalesId</th>";
-            echo "<th>Date/Time</th>";
-            echo "<th>Customer</th>";
-            echo "<th>Sales Employee</th>";
-            echo "<th>Call</th>";
+            echo "<th>salesId</th>";
+            echo "<th>date/Time</th>";
+            echo "<th>customer</th>";
+            echo "<th>goods</th>";
             echo "<th>complete</th>";
             echo "</tr>";
             echo "</thead>";
             echo "<tbody>";
             while ($ergebnis->fetch()) {
+                $so = new salesOrder($salesId);
                 echo "<tr>";
                 echo "<td>$salesId</td>";
                 echo "<td>$datetime</td>";
                 echo "<td>$cTitle $cFname $cLname</td>";
-                echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
-                echo "<td><a href='tel:$phone'>$phone</a></td>";
-                echo "<td><input type='button' class='btn btn-info' value='Continue processing' onclick='processSC($salesId)'></td>";
+                echo "<td>" . $so->getGoodsCount() . "</td>";
+                if ($so->isReadyForShipping()) {
+                    echo "<td><input type='button' class='btn btn-success' value='Continue processing' onclick='processSC($salesId)'></td>";
+                } else {
+                    echo "<td><input type='button' class='btn btn-danger' value='Not enough stock' onclick='processSC($salesId)'></td>";
+                }
+
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -334,10 +326,12 @@ class DB {
         $db = $this->connect2DB();
         $query = "select 
                         name,
-                        title,
+                        manufacturer,
                         amount,
+                        StockAmount,
                         StorageLocation,
-                        Unit
+                        Unit,
+                        isOrdered
                   from salesorder_has_goods join goods using(goodsid)
 		  join goodscategory using (categoryid)
                   where salesorderid = ?
@@ -345,25 +339,37 @@ class DB {
         $ergebnis = $db->prepare($query);
         $ergebnis->bind_param("i", $salesorderid);
         $ergebnis->execute();
-        $ergebnis->bind_result($name, $title, $amount, $location, $unit);
+        $ergebnis->bind_result($name, $manufacturer, $amount, $stockAmount, $location, $unit, $isOrdered);
         if ($ergebnis) {
             echo "<table class='table table-hover'>";
             echo "<thead><tr>";
-            echo "<th>Name</th>";
-            echo "<th>Category</th>";
-            echo "<th>Amount</th>";
+            echo "<th>name</th>";
+            echo "<th>manufacturer</th>";
+            echo "<th>ordered</th>";
+            echo "<th>stock</th>";
             echo "<th>Unit</th>";
-            echo "<th>Storage Location</th>";
+            echo "<th>location</th>";
+            echo "<th>purchase</th>";
             echo "</tr>";
             echo "</thead>";
             echo "<tbody>";
             while ($ergebnis->fetch()) {
-                echo "<tr>";
+                if ($stockAmount - $amount < 0) {
+                    echo "<tr class='danger'>";
+                } else {
+                    echo "<tr>";
+                }
                 echo "<td>$name</td>";
-                echo "<td>$title</td>";
+                echo "<td>$manufacturer</td>";
                 echo "<td>$amount</td>";
+                echo "<td>$stockAmount</td>";
                 echo "<td>$unit</td>";
                 echo "<td>$location</td>";
+                if ($isOrdered) {
+                    echo "<td>on the way</td>";
+                } else {
+                    echo "<td>---</td>";
+                }
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -381,45 +387,28 @@ class DB {
                         cust.title,
                         cust.FirstName,
                         cust.LastName,
-                        emp.title,
-                        emp.FirstName,
-                        emp.LastName,
-                        emp.PhoneNumber,
-                        emp.Email,
                         outgoingdatetime
                     from salesorder join customer c using (CustomerID)
                                     join Person cust on c.PersonID = cust.PersonID
-                                    join employee e using (EmployeeID)
-                                    join Person emp on e.PersonID = emp.Personid
                     where status = 'completed'
                     order by outgoingdatetime desc";
         $ergebnis = $db->prepare($query);
         $ergebnis->execute();
-        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail, $outgoingdatetime);
+        $ergebnis->bind_result($salesId, $datetime, $cTitle, $cFname, $cLname, $outgoingdatetime);
         if ($ergebnis) {
-            echo "<table class='table table-hover'>";
-            echo "<thead><tr>";
-            echo "<th>SalesId</th>";
-            echo "<th>Ordered</th>";
-            echo "<th>Completed</th>";
-            echo "<th>Customer</th>";
-            echo "<th>Sales Employee</th>";
-            echo "<th>Call</th>";
-            echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
+
             while ($ergebnis->fetch()) {
-                echo "<tr>";
-                echo "<td>$salesId</td>";
-                echo "<td>$datetime</td>";
-                echo "<td>$outgoingdatetime</td>";
-                echo "<td>$cTitle $cFname $cLname</td>";
-                echo "<td><a href='mailto:$mail'>$eTitle $eFname $eLname</td>";
-                echo "<td><a href='tel:$phone'>$phone</a></td>";
+                $so = new salesOrder($salesId);
+                $goodsCnt = $so->getGoodsCount();
+                echo "<tr data-toggle='collapse' data-target='.s$salesId' class='clickable info'>";
+                echo " <td>$salesId</td>";
+                echo " <td>$datetime</td>";
+                echo " <td>$outgoingdatetime</td>";
+                echo " <td>$cTitle $cFname $cLname</td>";
+                echo " <td>$goodsCnt</td>";
                 echo "</tr>";
+                $so->printGoods();
             }
-            echo "</tbody>";
-            echo "</table>";
         }
         $ergebnis->close();
         $db->close();
@@ -428,37 +417,32 @@ class DB {
     public function getFinalRemarks($completeThis) {
         $db = $this->connect2DB();
         $query = "select 
-                        DateTime,
-                        cust.title,
-                        cust.FirstName,
-                        cust.LastName,
-                        emp.title,
-                        emp.FirstName,
-                        emp.LastName,
-                        emp.PhoneNumber,
-                        emp.Email,
-                        packagingwishes
+                    DateTime,
+                    cust.title,
+                    cust.FirstName,
+                    cust.LastName,
+                    packagingwishes,
+                    Address,
+                    ZIP,
+                    City,
+                    Country
                     from salesorder join customer c using (CustomerID)
                                     join Person cust on c.PersonID = cust.PersonID
-                                    join employee e using (EmployeeID)
-                                    join Person emp on e.PersonID = emp.Personid
-                    where salesorderid = ?
-                    ";
+                                    join address using(AddressID)
+								
+                    where salesorderid = ?";
         $ergebnis = $db->prepare($query);
         $ergebnis->bind_param("i", $completeThis);
         $ergebnis->execute();
-        $ergebnis->bind_result($datetime, $cTitle, $cFname, $cLname, $eTitle, $eFname, $eLname, $phone, $mail, $wishes);
+        $ergebnis->bind_result($datetime, $cTitle, $cFname, $cLname, $wishes, $address, $zip, $city, $country);
         if ($ergebnis) {
-            echo "<div class='jumbotron'";
+
             while ($ergebnis->fetch()) {
-                echo "<p><b>Salesman: </b>";
-                echo "<a href='mailto:$mail'>$eTitle $eFname $eLname</a><br>";
-                echo "<b>Phone:</b> <a href='tel:$phone'>$phone</a></p>";
-                echo "<p><b>Customer: </b>";
-                echo "$cTitle $cFname $cLname</p>";
-                echo "<p><b>Packaging wishes:</b><br>$wishes</p>";
+                echo "<p>";
+                echo "<b>$cTitle $cFname $cLname </b></p>";
+                echo "<p>$address<br>$zip $city<br>$country</p>";
+                echo "<p><b>Packaging request:</b><br>$wishes</p>";
             }
-            echo "</div>";
         }
         $ergebnis->close();
         $db->close();
@@ -511,19 +495,19 @@ class DB {
 
     function printGoodsList() {
         $conn = $this->connect2DB();
-        
+
         $stmt = "SELECT GoodsID, Name, StockAmount, MinAmount FROM goods WHERE active = 1 ORDER BY GoodsID;";
-        
-        if($ergebnis = $conn->prepare($stmt)){
-            if($ergebnis->execute()){
+
+        if ($ergebnis = $conn->prepare($stmt)) {
+            if ($ergebnis->execute()) {
                 $ergebnis->bind_result($id, $name, $stockAmount, $minamount);
-                if($ergebnis){
-                    while($ergebnis->fetch()){
+                if ($ergebnis) {
+                    while ($ergebnis->fetch()) {
                         echo "<tr class='goodCage'>";
-                        echo "<td class='goodsoverview-td good_id goodsoverview-minify'>".$id."</td>";
-                        echo "<td class='goodsoverview-td good_description'>".$name."</td>";
-                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$minamount."</td>";
-                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$stockAmount."</td>";
+                        echo "<td class='goodsoverview-td good_id goodsoverview-minify'>" . $id . "</td>";
+                        echo "<td class='goodsoverview-td good_description'>" . $name . "</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>" . $minamount . "</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>" . $stockAmount . "</td>";
                         echo "</tr>";
                     }
                 }
@@ -678,6 +662,37 @@ class DB {
                 }
             }
         }
+    }
+
+    public function getGoods($salesId) {
+        $db = $this->connect2DB();
+        $goods = [];
+        $query = "SELECT goodsid, name, manufacturer, storageLocation, unit, minAmount, StockAmount, Isordered, amount FROM goods join salesorder_has_goods using(goodsid) where SalesOrderID= ?;";
+        $ergebnis = $db->prepare($query);
+        $ergebnis->bind_param("i", $salesId);
+        $ergebnis->execute();
+        if ($ergebnis->bind_result($goodsID, $name, $manufacturer, $storageLocation, $unit, $minAmount, $stockAmount, $isOrdered, $orderedAmount)) {
+            while ($ergebnis->fetch()) {
+                array_push($goods, new GoodsLight($goodsID, $name, $manufacturer, $storageLocation, $unit, $minAmount, $stockAmount, $isOrdered, $orderedAmount));
+            }
+            $db->close();
+//            var_dump($goods);
+            return $goods;
+        }
+    }
+
+    public function setNewStock($amount, $goodsid) {
+        $db = $this->connect2DB();
+        $success = false;
+        $query = "UPDATE goods SET StockAmount=? WHERE GoodsID=?;";
+        $ergebnis = $db->prepare($query);
+        $ergebnis->bind_param("ii", $amount, $goodsid);
+        $ergebnis->execute();
+        if ($ergebnis) {
+            $success = true;
+        }
+        $db->close();
+        return $success;
     }
 
 }
