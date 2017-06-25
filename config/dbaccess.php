@@ -174,6 +174,21 @@ class DB {
         }
     }
 
+    function getDeliveryInfo($DeliveryInfoID) {
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM DeliveryInfo WHERE DeliveryInfoID = " . $DeliveryInfoID;
+        $result = $con->query($query);
+        if ($result) {
+            $line = $result->fetch_object();
+            $deliverInfo = new DeliveryInfo($line->DeliveryInfoID, $line->EmployeeID, $line->SupplierID, $line->PurchaseOrderID, $line->DeliverySlipScanID, $line->IncomeDateTime, $line->DeliveryInformation);
+            $con->close();
+            return $deliverInfo;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
     function getAllDeliveredGoods($DeliveryInfoID) {
         $deliveredGoods = array();
 
@@ -221,6 +236,31 @@ class DB {
             $this->connection->close();
             return false;
         }
+    }
+
+    function updateStockAmount($GoodsID, $add) {
+        $con = $this->connect2DB();
+
+        $query = "SELECT * FROM Goods WHERE GoodsID = " . $GoodsID;
+        $result = $con->query($query);
+        if ($result) {
+            $line = $result->fetch_object();
+            $oldStockAmount = $line->StockAmount;
+            $newStockAmount = $oldStockAmount + $add;
+
+            $statement = $con->prepare("UPDATE Goods SET StockAmount = ? WHERE GoodsID = ?");
+            $statement->bind_param("ii", $newStockAmount, $GoodsID);
+            $result = $statement->execute();
+
+            if ($result) {
+                $con->close();
+                return true;
+            } else {
+                $con->close();
+                return false;
+            }
+        }
+        return false;
     }
 
 //-------------------------------------Beautiful Short 'n Awesome ObjectOriented Database Functions Stop Here Line-------------------------------------------
