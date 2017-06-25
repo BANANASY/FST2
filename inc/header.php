@@ -3,6 +3,11 @@ require_once 'model/Goods.class.php';
 require_once 'model/Address.class.php';
 require_once 'model/PurchaseOrder.class.php';
 require_once 'model/PurchasedGoods.class.php';
+require_once 'model/DeliveryInfo.class.php';
+require_once 'model/Employee.class.php';
+require_once 'model/DeliveredGoods.class.php';
+require_once 'model/PlainGood.class.php';
+
 require_once 'config/dbaccess.php';
 
 $db = new DB();
@@ -49,6 +54,8 @@ function alertPrint($data) {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
 
+        <script src="res/js/script.js"></script>
+
 
         <link rel="stylesheet" type="text/css" href="res/css/style.css">
 
@@ -69,7 +76,7 @@ function alertPrint($data) {
 
         <header>
             <!-- Fixed navbar -->
-<?php include 'navigation_bar.php'; ?>      
+            <?php include 'navigation_bar.php'; ?>      
         </header>
 
         <main>

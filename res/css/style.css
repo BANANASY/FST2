@@ -27,7 +27,7 @@ main{
 p.dibwars{
     font-family:"STARWARS";
     font-size:100px;
-    
+
 }
 .nav_inner{
     margin:auto;
@@ -52,31 +52,56 @@ th{
 }
 h4{
     text-align:left;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
 }
 table.nexx{
+    text-align: left;
+}
+table.nexx th{
     text-align: left;
 }
 .nexx-container{
     margin: 0 20px;
 }
+button.nexx{
+    width: 100%;
+    margin-bottom: 50px;
+}
+div.nexx{
+    /*position: relative;*/
+    height: 49px;
+}
+button.nexx2{
+    /*position: absolute;*/
+    float:right;
+    right: 10px;
+    margin-top: -8px;
+}
+input.nexx{
+    width: 10ch;
+}
 /* make sidebar nav vertical */ 
 @media (min-width: 768px) {
-  .sidebar-nav .navbar .navbar-collapse {
-    padding: 0;
-    max-height: none;
-  }
-  .sidebar-nav .navbar ul {
-    float: none;
-    display: block;
-  }
-  .sidebar-nav .navbar li {
-    float: none;
-    display: block;
-  }
-  .sidebar-nav .navbar li a {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
+    .sidebar-nav .navbar .navbar-collapse {
+        padding: 0;
+        max-height: none;
+    }
+    .sidebar-nav .navbar ul {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li {
+        float: none;
+        display: block;
+    }
+    .sidebar-nav .navbar li a {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
 }
 .goods_table{
     margin-bottom:0px; 
@@ -109,7 +134,7 @@ table.nexx{
 .goodstable-right{
     float:right;
     width:45%;
-   
+
 }
 .goodstable-left-td-title, .goodstable-right-td-title{
     padding-left:10px;
