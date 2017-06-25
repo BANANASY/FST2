@@ -81,7 +81,7 @@ switch ($load) {
                                     break;
                                 case 2:
                                     ?>
-                                    <button onclick="location.href = 'CompletePurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>'"  class="btn btn-info nexx2"> complete the reviewed purchase order</button>
+                                    <button onclick="location.href = 'CompletePurchaseOrder.php?purchaseOrderID=<?php echo $element->getPurchaseOrderID() ?>'"  class="btn btn-info nexx2"> complete this reviewed purchase order</button>
                                     <?php
                                     break;
                                 case 3:

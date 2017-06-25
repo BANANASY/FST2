@@ -159,7 +159,71 @@ class DB {
         }
     }
 
-//-------------------------------------Beautiful Short 'n Awesome ObjectOriented Database Function Stop Here Line-------------------------------------------
+    function getDeliveryInfoByPurchaseOrderID($PurchaseOrderID) {
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM DeliveryInfo WHERE PurchaseOrderID = " . $PurchaseOrderID;
+        $result = $con->query($query);
+        if ($result) {
+            $line = $result->fetch_object();
+            $deliverInfo = new DeliveryInfo($line->DeliveryInfoID, $line->EmployeeID, $line->SupplierID, $line->PurchaseOrderID, $line->DeliverySlipScanID, $line->IncomeDateTime, $line->DeliveryInformation);
+            $con->close();
+            return $deliverInfo;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function getAllDeliveredGoods($DeliveryInfoID) {
+        $deliveredGoods = array();
+
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM Delivery_Has_Goods WHERE DeliveryInfoID = " . $DeliveryInfoID;
+        $result = $con->query($query);
+        if ($result) {
+            while ($line = $result->fetch_object()) {
+                $deliveredGoods[] = new DeliveredGoods($line->DeliveryInfoID, $line->GoodsID, $line->Amount, $line->QualityIsOK);
+            }
+            $con->close();
+
+            return $deliveredGoods;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function getOneGood($goodID) {
+        $con = $this->connect2DB();
+        $query = "SELECT * FROM Goods WHERE GoodsID = " . $goodID;
+        $result = $con->query($query);
+        if ($result) {
+            $line = $result->fetch_object();
+            $good = new PlainGood($line->GoodsID, $line->CategoryID, $line->TaxID, $line->Name, $line->Description, $line->Manufacturer, $line->CurrentNetSalesPrice, $line->StorageLocation, $line->Unit, $line->MinAmount, $line->StockAmount, $line->Active, $line->IsOrdered);
+            $con->close();
+            return $good;
+        } else {
+            $con->close();
+            return false;
+        }
+    }
+
+    function updateStorageLocation($GoodsID, $storageLocation) {
+        $con = $this->connect2DB();
+        $statement = $con->prepare("UPDATE Goods SET StorageLocation = ? WHERE GoodsID = ?");
+        $statement->bind_param("si", $storageLocation, $GoodsID);
+        $result = $statement->execute();
+
+        if ($result) {
+            $this->connection->close();
+            return true;
+        } else {
+            $this->connection->close();
+            return false;
+        }
+    }
+
+//-------------------------------------Beautiful Short 'n Awesome ObjectOriented Database Functions Stop Here Line-------------------------------------------
 
 
 

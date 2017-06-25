@@ -6,6 +6,7 @@ require_once 'model/PurchasedGoods.class.php';
 require_once 'model/DeliveryInfo.class.php';
 require_once 'model/Employee.class.php';
 require_once 'model/DeliveredGoods.class.php';
+require_once 'model/PlainGood.class.php';
 
 require_once 'config/dbaccess.php';
 
