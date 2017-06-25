@@ -371,18 +371,18 @@ class DB {
     function printGoodsList(){
         $conn = $this->connect2DB();
         
-        $stmt = "SELECT GoodsID, Name, StockAmount, CurrentNetSalesPrice FROM goods WHERE active = 1 ORDER BY GoodsID;";
+        $stmt = "SELECT GoodsID, Name, StockAmount, MinAmount FROM goods WHERE active = 1 ORDER BY GoodsID;";
         
         if($ergebnis = $conn->prepare($stmt)){
             if($ergebnis->execute()){
-                $ergebnis->bind_result($id, $name, $stockAmount, $saleprice);
+                $ergebnis->bind_result($id, $name, $stockAmount, $minamount);
                 if($ergebnis){
                     while($ergebnis->fetch()){
                         echo "<tr class='goodCage'>";
-                        echo "<td class='good_id'>".$id."</td>";
-                        echo "<td>".$name."</td>";
-                        echo "<td>".$stockAmount."</td>";
-                        echo "<td>".$saleprice."</td>";
+                        echo "<td class='goodsoverview-td good_id goodsoverview-minify'>".$id."</td>";
+                        echo "<td class='goodsoverview-td good_description'>".$name."</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$minamount."</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$stockAmount."</td>";
                         echo "</tr>";
                     }
                 }
