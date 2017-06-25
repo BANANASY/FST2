@@ -551,19 +551,19 @@ class DB {
 
     function printGoodsList() {
         $conn = $this->connect2DB();
-
-        $stmt = "SELECT GoodsID, Name, StockAmount, CurrentNetSalesPrice FROM goods WHERE active = 1 ORDER BY GoodsID;";
-
-        if ($ergebnis = $conn->prepare($stmt)) {
-            if ($ergebnis->execute()) {
-                $ergebnis->bind_result($id, $name, $stockAmount, $saleprice);
-                if ($ergebnis) {
-                    while ($ergebnis->fetch()) {
+        
+        $stmt = "SELECT GoodsID, Name, StockAmount, MinAmount FROM goods WHERE active = 1 ORDER BY GoodsID;";
+        
+        if($ergebnis = $conn->prepare($stmt)){
+            if($ergebnis->execute()){
+                $ergebnis->bind_result($id, $name, $stockAmount, $minamount);
+                if($ergebnis){
+                    while($ergebnis->fetch()){
                         echo "<tr class='goodCage'>";
-                        echo "<td class='good_id'>" . $id . "</td>";
-                        echo "<td>" . $name . "</td>";
-                        echo "<td>" . $stockAmount . "</td>";
-                        echo "<td>" . $saleprice . "</td>";
+                        echo "<td class='goodsoverview-td good_id goodsoverview-minify'>".$id."</td>";
+                        echo "<td class='goodsoverview-td good_description'>".$name."</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$minamount."</td>";
+                        echo "<td class='goodsoverview-td goodsoverview-minify'>".$stockAmount."</td>";
                         echo "</tr>";
                     }
                 }
@@ -587,10 +587,10 @@ class DB {
                         t.Name AS tax,
                         t.Percent 
                     FROM goods g
-                    JOIN goodscategory gc USING (categoryid)
-                    JOIN supplier_has_goods USING (goodsid)
-                    JOIN taxes t USING (taxid)
-                    JOIN supplier s USING (supplierid)
+                    LEFT JOIN goodscategory gc USING (categoryid)
+                    LEFT JOIN supplier_has_goods USING (goodsid)
+                    LEFT JOIN taxes t USING (taxid)
+                    LEFT JOIN supplier s USING (supplierid)
                     WHERE goodsid = ?";
         if ($ergebnis = $conn->prepare($stmt)) {
             $ergebnis->bind_param("i", $id);

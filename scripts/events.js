@@ -2,7 +2,28 @@ $(document).ready(function () {
     var incoming_goods_sort = "ascending";
     var outgoing_goods_sort = "ascending";
     
-
+    //implement search function for products
+        $("#search-input").on("keyup", function(){
+            var g = $(this).val().toLowerCase();
+            $(".goodCage").find(".good_description").each(function(){
+                 var s = $(this).html().toLowerCase();
+                 var id = $(this).parent().find(".good_id").html().toLowerCase();
+                 if (s.indexOf(g)!== -1 || id.indexOf(g) !== -1) {
+                     $(this).parent().show();
+                 }else {
+                     $(this).parent().hide();
+                 }
+            });
+        });
+    
+    $(".goodCage").mouseenter(function(){
+        $(this).find(".goodsoverview-td").css("background-color","#7dff77");
+    });
+    
+    $(".goodCage").mouseleave(function(){
+        $(this).find(".goodsoverview-td").css("background-color","#CCFFBB");
+    });
+    
     $(".goodCage").click(function () {
         var id = $(this).find(".good_id").html();
         window.location.href = 'ArticleMovement.php?product=' + id;
