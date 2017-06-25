@@ -394,8 +394,11 @@ class DB {
             echo "</thead>";
             echo "<tbody>";
             while ($ergebnis->fetch()) {
-                if ($stockAmount - $amount < 0) {
+                $isOut = $stockAmount - $amount < 0;
+                if ($isOut && !$isOrdered) {
                     echo "<tr class='danger'>";
+                } elseif ($isOut && $isOrdered) {
+                    echo "<tr class='warning'>";
                 } else {
                     echo "<tr>";
                 }
@@ -406,7 +409,7 @@ class DB {
                 echo "<td>$unit</td>";
                 echo "<td>$location</td>";
                 if ($isOrdered) {
-                    echo "<td>on the way</td>";
+                    echo "<td><img src='img/onTheWay.gif' height='30'></td>";
                 } else {
                     echo "<td>---</td>";
                 }
