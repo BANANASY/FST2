@@ -31,8 +31,8 @@ if (isset($_GET['purchaseOrderID'])) {
             $error = true;
         }
 
-        $deliveredGoodsAmount = $_POST['deliveredGoodsAmount'];
-        $qualityOKofGoods = $_POST['qualityOKofGoods'];
+        $deliveredGoodsAmount = (!empty($_POST['deliveredGoodsAmount'])) ? $_POST['deliveredGoodsAmount'] : false;
+        $qualityOKofGoods = (!empty($_POST['qualityOKofGoods'])) ? $_POST['qualityOKofGoods'] : false;
 
         $length = count($deliveredGoodsAmount);
 

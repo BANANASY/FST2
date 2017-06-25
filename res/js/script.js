@@ -29,4 +29,29 @@ function checkPurchaseOrderReviewForm() {
 
     return true; //submit wird ausgeführt
 }
+function checkCompletePurchaseOrderForm() {
+    error = false;
 
+    var checkbox = document.getElementsByName('checkbox[]'); //knoten array funktioniert anscheinend nur mit ElementsByName nicht aber ElementsByID
+
+    var length = checkbox.length; //beide arrays haben die selbe länge, da beide textboxen in der form gleich oft erzeugt wurden
+
+    //alert("testX" + length);
+
+
+    for (var i = 0; i < length; i++) {
+        //alert("test" + checkbox[i].checked);
+
+        if (!checkbox[i].checked) {
+            error = true;
+            //alert("test" + i + "inner");
+        }
+    }
+
+    if (error) {
+        alert("Error: Please check every checkbox to assure that the goods in that line have been moved to the designated storage location.")
+        return false; //submit wird nicht ausgeführt
+    }
+
+    return true; //submit wird ausgeführt
+}
