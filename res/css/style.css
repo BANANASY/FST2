@@ -66,6 +66,7 @@ table.nexx th{
 }
 .nexx-container{
     margin: 0 20px;
+    overflow: hidden;
 }
 button.nexx{
     width: 100%;
@@ -184,11 +185,14 @@ input.nexx{
     border-bottom:1px solid #f4fff4; 
 }
 #search-input{
-    
+
 }
 .goodsoverview-minify{
     width:10%;
 }
 .goodsoverview-search-row{
     border-bottom:1px solid #005502;
+}
+div.noOverflow{
+    overflow: hidden;
 }
