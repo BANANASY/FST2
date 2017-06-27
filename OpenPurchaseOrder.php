@@ -13,6 +13,12 @@ if (empty($_GET['filter'])) {
 $purchaseOrder = $db->getAllPurchaseOrder();
 $seperatePurchaseOrder = array();
 
+$deliveryInfo = null;
+$deliveredGoods = array();
+$allDeliveredGoods = array();
+
+
+
 
 
 switch ($load) {
@@ -27,6 +33,10 @@ switch ($load) {
         foreach ($purchaseOrder as $element) {
             if ($element->getStatus() == "reviewed") {
                 $seperatePurchaseOrder[] = $element;
+
+                $deliveryInfo = $db->getDeliveryInfoByPurchaseOrderID($element->getPurchaseOrderID());
+                $deliveredGoods = $db->getAllDeliveredGoods($deliveryInfo->getDeliveryInfoID());
+                $allDeliveredGoods[] = $deliveredGoods;
             }
         }
         break;
@@ -34,6 +44,10 @@ switch ($load) {
         foreach ($purchaseOrder as $element) {
             if ($element->getStatus() == "completed") {
                 $seperatePurchaseOrder[] = $element;
+
+                $deliveryInfo = $db->getDeliveryInfoByPurchaseOrderID($element->getPurchaseOrderID());
+                $deliveredGoods = $db->getAllDeliveredGoods($deliveryInfo->getDeliveryInfoID());
+                $allDeliveredGoods[] = $deliveredGoods;
             }
         }
         break;
@@ -100,11 +114,13 @@ switch ($load) {
                                     <th>PurchaseOrderID</th>
                                     <th>GoodsID</th>
                                     <th>PurchasedPrice</th>
-                                    <th>Amount</th>
+                                    <th>Ordered Amount</th>
+                                    <?php echo ($load == 3 || $load == 2) ? "<th>Delivered Amount</th>" : "" ?>
                                 </tr>
 
                                 <?php
                                 $purchaseOrderHasGoods = $db->getAllPurchasedGoods($element->getPurchaseOrderID());
+                                $i = 0;
                                 foreach ($purchaseOrderHasGoods as $good) {
                                     ?>
                                     <tr>
@@ -112,8 +128,10 @@ switch ($load) {
                                         <td><?php echo $good->getGoodsID(); ?></td>
                                         <td>€ <?php echo $good->getPurchasePrice(); ?></td>
                                         <td><?php echo $good->getAmount(); ?></td>
+                                        <?php echo ($load == 3 || $load == 2) ? "<td>" . $allDeliveredGoods[$cnt - 1][$i]->getAmount() . "</td>" : "" ?>
                                     </tr>
                                     <?php
+                                    $i++;
                                 }
                                 ?>
 
