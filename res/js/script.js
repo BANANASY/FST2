@@ -15,7 +15,7 @@ function checkPurchaseOrderReviewForm() {
     for (var i = 0; i < length; i++) {
         //alert("test" + i);
         qualityOKofGoods[i].style.backgroundColor = "#85e085";
-        if (qualityOKofGoods[i].value > deliveredGoodsAmount[i].value) {
+        if (+qualityOKofGoods[i].value > +deliveredGoodsAmount[i].value) { //the unary plus (+) coerces its operand into a number
             qualityOKofGoods[i].style.backgroundColor = "#ff9999";
             error = true;
             //alert("test" + i + "inner");

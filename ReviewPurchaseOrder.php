@@ -112,7 +112,7 @@ if (isset($_GET['purchaseOrderID'])) {
                             <tr>
                                 <td><?php echo $good->getGoodsID(); ?></td>
                                 <td>€ <?php echo $good->getPurchasePrice(); ?></td>
-                                <td><?php echo $good->getAmount(); ?></td>
+                                <td><?php echo $good->getAmount(); ?></td> 
                                 <td>
                                     <div class="form-group">
                                         <input type="number" class="form-control nexx" id="deliveredGoodsAmount[]" name="deliveredGoodsAmount[]" required value="0" min="0">

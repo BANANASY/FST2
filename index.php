@@ -1,23 +1,4 @@
-
-<?php include 'inc/header.php';?>
-
-
-
-
-
-
-
-
-<!--test hallo-->
-
-
-
-
-
-
-
-
-
-
-<?php  include 'inc/footer.php';?>
+<?php 
+header("Location: StockMovement.php");
+?>
 
