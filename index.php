@@ -1,4 +1,4 @@
 <?php 
-header("Location: StockMovement.php");
+header("Location: OpenPurchaseOrder.php");
 ?>
 
